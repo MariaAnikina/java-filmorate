@@ -22,7 +22,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void creatingCorrectUser(){
+    void creatingCorrectUser() {
         User user = User.builder()
                 .email("cat@mail.ru")
                 .login("Мур")
@@ -128,8 +128,9 @@ public class UserControllerTest {
         assertEquals("Пользователь уже существует.", exception.getMessage());
         assertEquals(1, userController.getUsers().size());
     }
+
     @Test
-    void updatingAnExistingUser(){
+    void updatingAnExistingUser() {
         User user = User.builder()
                 .email("cat@mail.ru")
                 .login("Мур")
@@ -152,7 +153,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void updatingNonExistentUser(){
+    void updatingNonExistentUser() {
         User user = User.builder()
                 .email("cat@mail.ru")
                 .login("Мур")
