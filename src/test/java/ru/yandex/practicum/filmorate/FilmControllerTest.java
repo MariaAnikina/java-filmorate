@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 public class FilmControllerTest {
     FilmController filmController;
+
     @BeforeEach
     void createFilmController() {
         filmController = new FilmController();
