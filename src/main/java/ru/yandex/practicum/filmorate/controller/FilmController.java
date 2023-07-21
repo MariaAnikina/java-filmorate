@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.FilmorateApplication;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -18,6 +17,7 @@ public class FilmController {
 
     private Map<Integer, Film> films = new HashMap<>();
     private int idFilm = 1;
+
     @GetMapping ("/films")
     public List<Film> getFilms() {
         return new ArrayList<>(films.values());
@@ -49,7 +49,7 @@ public class FilmController {
             log.warn("Возникло исключение - попытка обновить несуществующий фильм: {}", film);
             throw new ValidationException("Такого фильма еще не существует.");
         }
-        if (film.getName().isBlank()|| film.getDescription().length() > 200 ||
+        if (film.getName().isBlank() || film.getDescription().length() > 200 ||
                 film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28)) || film.getDuration() <= 0) {
             log.warn("Возникло исключение - попытка обновить фильм с неккоректными параметрами: {}", film);
             throw new ValidationException("Параметры фильма не соответствуют требованиям.");
