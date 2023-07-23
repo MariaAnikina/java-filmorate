@@ -32,7 +32,7 @@ public class UserController {
             log.warn("Возникло исключение - попытка создать пользователя с неккоректным логином: {}", user);
             throw new ValidationException("Login не может быть пустым и содержать пробелы");
         }
-        if (user.getBirthday().isAfter(LocalDate.now())){
+        if (user.getBirthday().isAfter(LocalDate.now())) {
             log.warn("Возникло исключение - попытка создать пользователя с неккоректной датой рождения: {}", user);
             throw new ValidationException("Неккоректная дата рождения");
         }
