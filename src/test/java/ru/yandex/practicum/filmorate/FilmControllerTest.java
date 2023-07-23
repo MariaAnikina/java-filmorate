@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class FilmControllerTest {
-    FilmController filmController;
+    private FilmController filmController;
 
     @BeforeEach
     void createFilmController() {
@@ -44,7 +44,7 @@ public class FilmControllerTest {
                 .releaseDate(LocalDate.of(2017, 9, 7))
                 .build();
         ValidationException exception = assertThrows(ValidationException.class, () -> filmController.createFilm(film));
-        assertEquals("Параметры фильма не соответствуют требованиям.", exception.getMessage());
+        assertEquals("У фильма должно быть название.", exception.getMessage());
         assertEquals(0, filmController.getFilms().size());
     }
 
@@ -59,7 +59,7 @@ public class FilmControllerTest {
                 .releaseDate(LocalDate.of(2017, 9, 7))
                 .build();
         ValidationException exception = assertThrows(ValidationException.class, () -> filmController.createFilm(film));
-        assertEquals("Параметры фильма не соответствуют требованиям.", exception.getMessage());
+        assertEquals("Описание бильма должно быть длигною менее 201 символа", exception.getMessage());
         assertEquals(0, filmController.getFilms().size());
     }
 
@@ -72,7 +72,7 @@ public class FilmControllerTest {
                 .releaseDate(LocalDate.of(1017, 9, 7))
                 .build();
         ValidationException exception = assertThrows(ValidationException.class, () -> filmController.createFilm(film));
-        assertEquals("Параметры фильма не соответствуют требованиям.", exception.getMessage());
+        assertEquals("В то время фильмов не было(", exception.getMessage());
         assertEquals(0, filmController.getFilms().size());
     }
 
@@ -85,7 +85,7 @@ public class FilmControllerTest {
                 .releaseDate(LocalDate.of(2017, 9, 7))
                 .build();
         ValidationException exception = assertThrows(ValidationException.class, () -> filmController.createFilm(film));
-        assertEquals("Параметры фильма не соответствуют требованиям.", exception.getMessage());
+        assertEquals("Длительность фильма должна быть положительна", exception.getMessage());
         assertEquals(0, filmController.getFilms().size());
     }
 

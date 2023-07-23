@@ -24,10 +24,17 @@ public class UserController {
 
     @PostMapping(value = "/users")
     public User createUser(@RequestBody User user) {
-        if (user.getEmail().isBlank() || !user.getEmail().contains("@") || user.getLogin().isBlank() ||
-                user.getBirthday().isAfter(LocalDate.now()) || user.getLogin().contains(" ")) {
-            log.warn("Возникло исключение - попытка создать пользователя с неккоректными параметрами: {}", user);
-            throw new ValidationException("Параметры пользователя не соответствуют требованиям.");
+        if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
+            log.warn("Возникло исключение - попытка создать пользователя с неккоректным Email: {}", user);
+            throw new ValidationException("Email должен содержать символ - @, а также не может быть пустым");
+        }
+        if (user.getLogin().isBlank() ||  user.getLogin().contains(" ")) {
+            log.warn("Возникло исключение - попытка создать пользователя с неккоректным логином: {}", user);
+            throw new ValidationException("Login не может быть пустым и содержать пробелы");
+        }
+        if (user.getBirthday().isAfter(LocalDate.now())){
+            log.warn("Возникло исключение - попытка создать пользователя с неккоректной датой рождения: {}", user);
+            throw new ValidationException("Неккоректная дата рождения");
         }
         if (user.getId() == null) {
             user.setId(idUser);

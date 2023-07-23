@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class UserControllerTest {
-    UserController userController;
+    private UserController userController;
 
     @BeforeEach
     void createUserController() {
@@ -31,7 +31,7 @@ public class UserControllerTest {
                 .build();
         userController.createUser(user);
         assertEquals(1, userController.getUsers().size());
-        assertEquals(1, user.getId());
+        assertEquals(1, userController.getUsers().get(0).getId());
     }
 
     @Test
@@ -57,7 +57,7 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(2020, 5, 3))
                 .build();
         ValidationException exception = assertThrows(ValidationException.class, () -> userController.createUser(user));
-        assertEquals("Параметры пользователя не соответствуют требованиям.", exception.getMessage());
+        assertEquals("Email должен содержать символ - @, а также не может быть пустым", exception.getMessage());
     }
 
     @Test
@@ -69,7 +69,7 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(2020, 5, 3))
                 .build();
         ValidationException exception = assertThrows(ValidationException.class, () -> userController.createUser(user));
-        assertEquals("Параметры пользователя не соответствуют требованиям.", exception.getMessage());
+        assertEquals("Email должен содержать символ - @, а также не может быть пустым", exception.getMessage());
     }
 
     @Test
@@ -81,7 +81,7 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(2020, 5, 3))
                 .build();
         ValidationException exception = assertThrows(ValidationException.class, () -> userController.createUser(user));
-        assertEquals("Параметры пользователя не соответствуют требованиям.", exception.getMessage());
+        assertEquals("Login не может быть пустым и содержать пробелы", exception.getMessage());
     }
 
     @Test
@@ -93,7 +93,7 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(2020, 5, 3))
                 .build();
         ValidationException exception = assertThrows(ValidationException.class, () -> userController.createUser(user));
-        assertEquals("Параметры пользователя не соответствуют требованиям.", exception.getMessage());
+        assertEquals("Login не может быть пустым и содержать пробелы", exception.getMessage());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(2025, 5, 3))
                 .build();
         ValidationException exception = assertThrows(ValidationException.class, () -> userController.createUser(user));
-        assertEquals("Параметры пользователя не соответствуют требованиям.", exception.getMessage());
+        assertEquals("Неккоректная дата рождения", exception.getMessage());
     }
 
     @Test
