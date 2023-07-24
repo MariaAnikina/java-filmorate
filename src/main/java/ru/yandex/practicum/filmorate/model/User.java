@@ -9,8 +9,8 @@ import java.time.LocalDate;
 @Builder
 public class User {
     private  Integer id;
-    private final String email;
-    private  final String login;
+    private String email;
+    private  String login;
     private String name;
-    private final LocalDate birthday;
+    private LocalDate birthday;
 }

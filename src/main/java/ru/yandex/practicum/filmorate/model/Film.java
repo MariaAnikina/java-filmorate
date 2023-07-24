@@ -9,8 +9,8 @@ import java.time.LocalDate;
 @Builder
 public class Film {
     private Integer id;
-    private final String name;
-    private final String description;
-    private final LocalDate releaseDate;
-    private final int duration;
+    private String name;
+    private String description;
+    private LocalDate releaseDate;
+    private int duration;
 }
