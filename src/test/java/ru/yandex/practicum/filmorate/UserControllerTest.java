@@ -6,6 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 
@@ -15,10 +18,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 public class UserControllerTest {
     private UserController userController;
+    private UserStorage userStorage;
+    private UserService userService;
 
     @BeforeEach
     void createUserController() {
-        userController = new UserController();
+        userStorage = new InMemoryUserStorage();
+        userService = new UserService(userStorage);
+        userController = new UserController(userStorage, userService);
     }
 
     @Test
@@ -30,8 +37,8 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(2020, 5, 3))
                 .build();
         userController.createUser(user);
-        assertEquals(1, userController.getUsers().size());
-        assertEquals(1, userController.getUsers().get(0).getId());
+        assertEquals(1, userStorage.getUsers().size());
+        assertEquals(1, userStorage.getUsers().get(1).getId());
     }
 
     @Test
@@ -43,7 +50,7 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(2020, 5, 3))
                 .build();
         userController.createUser(user);
-        assertEquals(1, userController.getUsers().size());
+        assertEquals(1, userStorage.getUsers().size());
         assertEquals("Мур", user.getName());
         assertEquals(1, user.getId());
     }
@@ -126,7 +133,7 @@ public class UserControllerTest {
                 .build();
         ValidationException exception = assertThrows(ValidationException.class, () -> userController.createUser(userClone));
         assertEquals("Пользователь уже существует.", exception.getMessage());
-        assertEquals(1, userController.getUsers().size());
+        assertEquals(1, userStorage.getUsers().size());
     }
 
     @Test
@@ -146,10 +153,10 @@ public class UserControllerTest {
                 .birthday(LocalDate.of(2020, 5, 3))
                 .build();
         userController.updateUser(userUpdate);
-        assertEquals(1, userController.getUsers().size());
+        assertEquals(1, userStorage.getUsers().size());
         assertEquals(1, user.getId());
-        assertEquals("Мурка", userController.getUsers().get(0).getLogin());
-        assertEquals("Мурка", userController.getUsers().get(0).getName());
+        assertEquals("Мурка", userStorage.getUsers().get(1).getLogin());
+        assertEquals("Мурка", userStorage.getUsers().get(1).getName());
     }
 
     @Test
@@ -168,7 +175,28 @@ public class UserControllerTest {
                 .name("")
                 .birthday(LocalDate.of(2020, 5, 3))
                 .build();
-        ValidationException exception = assertThrows(ValidationException.class, () -> userController.updateUser(userUpdate));
-        assertEquals("Такого пользователя еще не существует.", exception.getMessage());
+        NullPointerException exception = assertThrows(NullPointerException.class, () -> userController.updateUser(userUpdate));
+        assertEquals("Пользователь еще не существует.", exception.getMessage());
+    }
+
+    @Test
+    void addingToFriends() {
+        User user = User.builder()
+                .email("cat@mail.ru")
+                .login("Мур")
+                .name("Барсик")
+                .birthday(LocalDate.of(2021, 5, 3))
+                .build();
+        userController.createUser(user);
+        User user2 = User.builder()
+                .email("cat@mail.ru")
+                .login("Test")
+                .name("Friend")
+                .birthday(LocalDate.of(2022, 5, 3))
+                .build();
+        userController.createUser(user2);
+        userController.addAsFriend(user.getId(), user2.getId());
+        assertEquals(true, user2.getFriends().contains(1));
+        assertEquals(true, user.getFriends().contains(2));
     }
 }
