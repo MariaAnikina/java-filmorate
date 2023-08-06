@@ -16,7 +16,7 @@ public class InMemoryUserStorage implements UserStorage {
     private int idUser = 1;
 
     @Override
-    public User createUser(User user) {
+    public User create(User user) {
         if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
             log.warn("Возникло исключение - попытка создать пользователя с неккоректным Email: {}", user);
             throw new ValidationException("Email должен содержать символ - @, а также не может быть пустым");
@@ -49,7 +49,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User updateUser(User user) {
+    public User update(User user) {
         if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
             log.warn("Возникло исключение - попытка создать пользователя с неккоректным Email: {}", user);
             throw new ValidationException("Email должен содержать символ - @, а также не может быть пустым");
@@ -78,7 +78,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User deleteUser(User user) {
+    public User delete(User user) {
         if (users.containsKey(user.getId())) {
             users.remove(user.getId());
             log.debug("Логирование удаленного объекта: {}", user);

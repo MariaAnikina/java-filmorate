@@ -5,43 +5,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.util.*;
 
 @RestController
 @Slf4j
 public class FilmController {
-    private final FilmStorage filmStorage;
     private final FilmService filmService;
 
     @Autowired
-    public FilmController(FilmStorage filmStorage, FilmService filmService) {
-        this.filmStorage = filmStorage;
+    public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
 
     @GetMapping("/films")
     public List<Film> getFilms() {
-        return new ArrayList<>(filmStorage.getFilms().values());
+        return new ArrayList<>(filmService.getFilmStorage().getFilms().values());
     }
 
     @GetMapping("/films/{id}")
     public Film getFilm(@PathVariable Integer id) {
-        if (filmStorage.getFilms().containsKey(id)) {
-            return filmStorage.getFilms().get(id);
+        if (filmService.getFilmStorage().getFilms().containsKey(id)) {
+            return filmService.getFilmStorage().getFilms().get(id);
         }
         throw new NullPointerException();
     }
 
     @PostMapping(value = "/films")
-    public Film createFilm(@RequestBody Film film) {
-        return filmStorage.createFilm(film);
+    public Film create(@RequestBody Film film) {
+        return filmService.getFilmStorage().create(film);
     }
 
     @PutMapping(value = "/films")
-    public Film updateFilm(@RequestBody Film film) {
-        return filmStorage.updateFilm(film);
+    public Film update(@RequestBody Film film) {
+        return filmService.getFilmStorage().update(film);
     }
 
     @PutMapping("/films/{id}/like/{userId}")

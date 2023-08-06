@@ -65,4 +65,8 @@ public class UserService {
         }
         return friends;
     }
+
+    public UserStorage getUserStorage() {
+        return userStorage;
+    }
 }

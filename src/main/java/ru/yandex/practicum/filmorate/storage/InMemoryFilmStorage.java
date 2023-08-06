@@ -16,7 +16,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     private int idFilm = 1;
 
     @Override
-    public Film createFilm(Film film) {
+    public Film create(Film film) {
         if (films.containsKey(film.getId())) {
             log.warn("Возникло исключение - попытка создать существующий фильм: {}", film);
             throw new ValidationException("Такой фильм уже существует.");
@@ -47,7 +47,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film updateFilm(Film film) {
+    public Film update(Film film) {
         if (!films.containsKey(film.getId())) {
             log.warn("Возникло исключение - попытка создать несуществующий фильм: {}", film);
             throw new NullPointerException("Такого фильма еще не существует.");
@@ -78,7 +78,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film deleteFilm(Film film) {
+    public Film delete(Film film) {
         if (films.containsKey(film.getId())) {
             films.remove(film.getId());
             log.debug("Логирование удаленного объекта: {}", film);

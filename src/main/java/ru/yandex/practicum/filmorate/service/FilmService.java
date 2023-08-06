@@ -51,4 +51,8 @@ public class FilmService {
                 .limit(count)
                 .collect(Collectors.toList());
     }
+
+    public FilmStorage getFilmStorage() {
+        return filmStorage;
+    }
 }

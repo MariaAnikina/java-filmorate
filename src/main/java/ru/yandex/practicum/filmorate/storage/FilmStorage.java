@@ -5,11 +5,11 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.util.Map;
 
 public interface FilmStorage {
-    Film createFilm(Film film);
+    Film create(Film film);
 
-    Film updateFilm(Film film);
+    Film update(Film film);
 
-    Film deleteFilm(Film film);
+    Film delete(Film film);
 
     Map<Integer, Film> getFilms();
 }
