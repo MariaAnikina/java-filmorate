@@ -10,6 +10,7 @@ import java.util.*;
 
 @RestController
 @Slf4j
+@RequestMapping(value = "/films")
 public class FilmController {
     private final FilmService filmService;
 
@@ -18,40 +19,40 @@ public class FilmController {
         this.filmService = filmService;
     }
 
-    @GetMapping("/films")
+    @GetMapping
     public List<Film> getFilms() {
-        return new ArrayList<>(filmService.getFilmStorage().getFilms().values());
+        return new ArrayList<>(filmService.getFilms().values());
     }
 
-    @GetMapping("/films/{id}")
+    @GetMapping("/{id}")
     public Film getFilm(@PathVariable Integer id) {
-        if (filmService.getFilmStorage().getFilms().containsKey(id)) {
-            return filmService.getFilmStorage().getFilms().get(id);
+        if (filmService.getFilms().containsKey(id)) {
+            return filmService.getFilms().get(id);
         }
         throw new NullPointerException();
     }
 
-    @PostMapping(value = "/films")
+    @PostMapping
     public Film create(@RequestBody Film film) {
-        return filmService.getFilmStorage().create(film);
+        return filmService.create(film);
     }
 
-    @PutMapping(value = "/films")
+    @PutMapping
     public Film update(@RequestBody Film film) {
-        return filmService.getFilmStorage().update(film);
+        return filmService.update(film);
     }
 
-    @PutMapping("/films/{id}/like/{userId}")
+    @PutMapping("/{id}/like/{userId}")
     public Set<Integer> addLike(@PathVariable Integer id, @PathVariable Integer userId) {
         return filmService.addLike(id, userId);
     }
 
-    @DeleteMapping("/films/{id}/like/{userId}")
+    @DeleteMapping("/{id}/like/{userId}")
     public Film deleteLike(@PathVariable Integer id, @PathVariable Integer userId) {
         return filmService.deleteLike(id, userId);
     }
 
-    @GetMapping("/films/popular")
+    @GetMapping("/popular")
     public List<Film> displayPopularMovies(@RequestParam(defaultValue = "10") int count) {
         return filmService.displayPopularMovies(count);
     }

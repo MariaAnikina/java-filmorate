@@ -10,6 +10,7 @@ import java.util.*;
 
 @RestController
 @Slf4j
+@RequestMapping(value = "/users")
 public class UserController {
     private UserService userService;
 
@@ -18,45 +19,45 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping
     public List<User> getUsers() {
-        return new ArrayList<>(userService.getUserStorage().getUsers().values());
+        return new ArrayList<>(userService.getUsers().values());
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public User getUser(@PathVariable Integer id) {
-        if (userService.getUserStorage().getUsers().containsKey(id)) {
-            return userService.getUserStorage().getUsers().get(id);
+        if (userService.getUsers().containsKey(id)) {
+            return userService.getUsers().get(id);
         }
         throw new NullPointerException();
     }
 
-    @PostMapping(value = "/users")
+    @PostMapping
     public User create(@RequestBody User user) {
-        return userService.getUserStorage().create(user);
+        return userService.create(user);
     }
 
-    @PutMapping(value = "/users")
+    @PutMapping
     public User update(@RequestBody User user) {
-        return userService.getUserStorage().update(user);
+        return userService.update(user);
     }
 
-    @PutMapping("/users/{id}/friends/{friendId}")
+    @PutMapping("/{id}/friends/{friendId}")
     public Set<Integer> addAsFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
         return userService.addAsFriend(id, friendId);
     }
 
-    @DeleteMapping("/users/{id}/friends/{friendId}")
+    @DeleteMapping("/{id}/friends/{friendId}")
     public Set<Integer> removeFromFriends(@PathVariable Integer id, @PathVariable  Integer friendId) {
         return userService.removeFromFriends(id, friendId);
     }
 
-    @GetMapping("/users/{id}/friends")
+    @GetMapping("/{id}/friends")
     public List<User> getListOfFriends(@PathVariable Integer id) {
         return userService.getListOfFriends(id);
     }
 
-    @GetMapping("/users/{id}/friends/common/{otherId}")
+    @GetMapping("/{id}/friends/common/{otherId}")
     public Set<User> displayListOfMutualFriends(@PathVariable Integer id, @PathVariable  Integer otherId) {
         return userService.displayListOfMutualFriends(id, otherId);
     }

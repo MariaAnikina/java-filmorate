@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,7 +53,15 @@ public class FilmService {
                 .collect(Collectors.toList());
     }
 
-    public FilmStorage getFilmStorage() {
-        return filmStorage;
+    public Map<Integer, Film> getFilms() {
+        return filmStorage.getFilms();
+    }
+
+    public Film create(Film film) {
+        return filmStorage.create(film);
+    }
+
+    public Film update(Film film) {
+        return filmStorage.update(film);
     }
 }
