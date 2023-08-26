@@ -1,72 +1,59 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @Slf4j
+@RequestMapping(value = "/films")
 public class FilmController {
+    private final FilmService filmService;
 
-    private Map<Integer, Film> films = new HashMap<>();
-    private int idFilm = 1;
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
 
-    @GetMapping ("/films")
+    @GetMapping
     public List<Film> getFilms() {
-        return new ArrayList<>(films.values());
+        return new ArrayList<>(filmService.getFilms().values());
     }
 
-    @PostMapping (value = "/films")
-    public Film createFilm(@RequestBody Film film) {
-        if (film.getId() == null) {
-            film.setId(idFilm);
-            idFilm++;
+    @GetMapping("/{id}")
+    public Film getFilm(@PathVariable Integer id) {
+        if (filmService.getFilms().containsKey(id)) {
+            return filmService.getFilms().get(id);
         }
-        if (films.containsKey(film.getId())) {
-            log.warn("Возникло исключение - попытка создать существующий фильм: {}", film);
-            throw new ValidationException("Такой фильм уже существует.");
-        }
-        if (film.getName().isBlank()) {
-            log.warn("Возникло исключение - попытка создать фильм без названия: {}", film);
-            throw new ValidationException("У фильма должно быть название.");
-        }
-        if (film.getDescription().length() > 200) {
-            log.warn("Возникло исключение - попытка создать фильм с описанием длиною более 200 символов: {}", film);
-            throw new ValidationException("Описание бильма должно быть длигною менее 201 символа");
-        }
-        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            log.warn("Возникло исключение - попытка создать фильм с неккоректной датой выпуска: {}", film);
-            throw new ValidationException("В то время фильмов не было(");
-        }
-        if (film.getDuration() <= 0) {
-            log.warn("Возникло исключение - попытка создать фильм с неккоректной длительностью: {}", film);
-            throw new ValidationException("Длительность фильма должна быть положительна");
-        }
-        films.put(film.getId(), film);
-        log.debug("Логирование созданного объекта: {}", film);
-        return film;
+        throw new NullPointerException();
     }
 
-    @PutMapping(value = "/films")
-    public Film updateFilm(@RequestBody Film film) {
-        if (!films.containsKey(film.getId())) {
-            log.warn("Возникло исключение - попытка обновить несуществующий фильм: {}", film);
-            throw new ValidationException("Такого фильма еще не существует.");
-        }
-        if (film.getName().isBlank() || film.getDescription().length() > 200 ||
-                film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28)) || film.getDuration() <= 0) {
-            log.warn("Возникло исключение - попытка обновить фильм с неккоректными параметрами: {}", film);
-            throw new ValidationException("Параметры фильма не соответствуют требованиям.");
-        }
-        films.put(film.getId(), film);
-        log.debug("Логирование обнавленного объекта: {}", film);
-        return film;
+    @PostMapping
+    public Film create(@RequestBody Film film) {
+        return filmService.create(film);
+    }
+
+    @PutMapping
+    public Film update(@RequestBody Film film) {
+        return filmService.update(film);
+    }
+
+    @PutMapping("/{id}/like/{userId}")
+    public Set<Integer> addLike(@PathVariable Integer id, @PathVariable Integer userId) {
+        return filmService.addLike(id, userId);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public Film deleteLike(@PathVariable Integer id, @PathVariable Integer userId) {
+        return filmService.deleteLike(id, userId);
+    }
+
+    @GetMapping("/popular")
+    public List<Film> displayPopularMovies(@RequestParam(defaultValue = "10") int count) {
+        return filmService.displayPopularMovies(count);
     }
 }
