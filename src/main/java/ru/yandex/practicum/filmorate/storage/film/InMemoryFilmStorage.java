@@ -1,12 +1,15 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.film;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -77,18 +80,18 @@ public class InMemoryFilmStorage implements FilmStorage {
         return film;
     }
 
-    @Override
-    public Film delete(Film film) {
-        if (films.containsKey(film.getId())) {
-            films.remove(film.getId());
-            log.debug("Логирование удаленного объекта: {}", film);
-            return film;
-        }
-        throw new ValidationException("Фильма с id = " + film.getId() + " не существует");
+    public List<Film> getFilms() {
+        return new ArrayList<>(films.values());
     }
 
-    public Map<Integer, Film> getFilms() {
-        return films;
+    @Override
+    public Film findFilmById(int id) {
+        return null;
+    }
+
+    @Override
+    public List<Film> getMostPopular(int size) {
+        return null;
     }
 
     public void setFilms(Map<Integer, Film> films) {
