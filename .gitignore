@@ -13,6 +13,7 @@ HELP.md
 target/
 .mvn/
 /mvn*
+.mvn/wrapper/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -43,3 +44,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### MVN ###
+mvnw
+mvnw.cmd
