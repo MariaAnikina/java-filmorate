@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class RatingMPA {
+
     private final int id;
     private final String name;
 }
