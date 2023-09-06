@@ -30,30 +30,20 @@ public class RatingMPAStorageTest {
                 new RatingMPA(4, "R"),
                 new RatingMPA(5, "NC-17")
         );
-
         assertEquals(testList, ratingMPA);
     }
 
     @Test
     void shouldGetRatingMPAById() {
         RatingMPA ratingMPA = storage.getRatingMPAById(1);
-
         assertEquals(new RatingMPA(1, "G"), ratingMPA);
-
         ratingMPA = storage.getRatingMPAById(2);
-
         assertEquals(new RatingMPA(2, "PG"), ratingMPA);
-
         ratingMPA = storage.getRatingMPAById(3);
-
         assertEquals(new RatingMPA(3, "PG-13"), ratingMPA);
-
         ratingMPA = storage.getRatingMPAById(4);
-
         assertEquals(new RatingMPA(4, "R"), ratingMPA);
-
         ratingMPA = storage.getRatingMPAById(5);
-
         assertEquals(new RatingMPA(5, "NC-17"), ratingMPA);
     }
 }

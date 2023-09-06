@@ -95,6 +95,7 @@ public class FilmStorageTest {
         Film filmById = filmStorage.findFilmById(film.getId());
         assertEquals(film, filmById);
     }
+
     @Test
     void shouldGetMostPopular(@Autowired LikeStorage likeStorage) {
         Film film1 = new Film("Оно", "Красный шарик", LocalDate.parse("2017-09-07"),
