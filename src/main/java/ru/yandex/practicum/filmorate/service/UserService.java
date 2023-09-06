@@ -53,8 +53,7 @@ public class UserService {
     public User getUserById(Integer id) {
         try {
             return userStorage.getUserById(id);
-        }
-        catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             throw new UserNotFoundException("Пользователь с id=" + id + " не найден.");
         }
     }
