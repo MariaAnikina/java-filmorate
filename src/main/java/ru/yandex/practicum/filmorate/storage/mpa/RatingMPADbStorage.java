@@ -1,10 +1,8 @@
 package ru.yandex.practicum.filmorate.storage.mpa;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.RatingMPANotFoundException;
 import ru.yandex.practicum.filmorate.model.RatingMPA;
 
 import java.sql.ResultSet;
