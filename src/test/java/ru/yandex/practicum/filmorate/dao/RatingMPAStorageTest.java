@@ -58,14 +58,4 @@ public class RatingMPAStorageTest {
 
         assertEquals(new RatingMPA(5, "NC-17"), ratingMPA);
     }
-
-    @Test
-    void shouldNotGetRatingMPAWhenIncorrectId() {
-        RatingMPANotFoundException e = Assertions.assertThrows(
-                RatingMPANotFoundException.class,
-                () -> storage.getRatingMPAById(100)
-        );
-
-        assertEquals("Рейтинг MPA с id=100 не найден.", e.getMessage());
-    }
 }

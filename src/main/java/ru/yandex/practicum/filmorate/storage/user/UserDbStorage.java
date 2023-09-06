@@ -54,10 +54,6 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User getUserById(int id) {
-        try {
-            return jdbcTemplate.queryForObject("select * from users where user_id = ?", FilmorateMapper::userFromRow, id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new UserNotFoundException("Пользователь с id=" + id + " не найден.");
-        }
+        return jdbcTemplate.queryForObject("select * from users where user_id = ?", FilmorateMapper::userFromRow, id);
     }
 }

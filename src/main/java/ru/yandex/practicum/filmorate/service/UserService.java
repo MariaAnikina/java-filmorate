@@ -2,7 +2,10 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.friend.FriendStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
@@ -22,9 +25,13 @@ public class UserService {
     }
 
     public void addAsFriend(Integer id, Integer friendId) {
-        getUserById(id);
-        getUserById(friendId);
-        friendStorage.addFriend(id, friendId);
+        try {
+            getUserById(id);
+            getUserById(friendId);
+            friendStorage.addFriend(id, friendId);
+        } catch (UserNotFoundException e) {
+            throw new UserNotFoundException("Пользователь с id=" + id + " не найден.");
+        }
     }
 
     public void removeFromFriends(Integer id, Integer friendId) {
@@ -45,7 +52,12 @@ public class UserService {
     }
 
     public User getUserById(Integer id) {
-        return userStorage.getUserById(id);
+        try {
+            return userStorage.getUserById(id);
+        }
+        catch (EmptyResultDataAccessException e) {
+            throw new UserNotFoundException("Пользователь с id=" + id + " не найден.");
+        }
     }
 
     public List<User> getUsers() {

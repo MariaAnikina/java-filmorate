@@ -18,8 +18,7 @@ import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @AutoConfigureTestDatabase
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -68,16 +67,6 @@ public class GenreStorageTest {
         genre = storage.getGenreById(6);
 
         assertEquals(new Genre(6, "Боевик"), genre);
-    }
-
-    @Test
-    void shouldNotGetGenreWhenIncorrectId() {
-        GenreNotFoundException e = Assertions.assertThrows(
-                GenreNotFoundException.class,
-                () -> storage.getGenreById(100)
-        );
-
-        assertEquals("Жанр с id=100 не найден.", e.getMessage());
     }
 
     @Test

@@ -58,13 +58,9 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film findFilmById(int id) {
-        try {
-            String sqlQuery = "select f.*, rating.name as mpa_name from film as f left join rating " +
-                    "on f.mpa_id = rating.id where f.film_id = ?";
-            return jdbcTemplate.queryForObject(sqlQuery, FilmorateMapper::filmFromRow, id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new FilmNotFoundException("Фильм с id=" + id + " не найден.");
-        }
+        String sqlQuery = "select f.*, rating.name as mpa_name from film as f left join rating " +
+                "on f.mpa_id = rating.id where f.film_id = ?";
+        return jdbcTemplate.queryForObject(sqlQuery, FilmorateMapper::filmFromRow, id);
     }
 
     @Override

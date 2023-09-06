@@ -85,14 +85,4 @@ public class UserStorageTest {
         User userById = storage.getUserById(user.getId());
         assertEquals(user, userById);
     }
-
-    @Test
-    void shouldNotGetUserWhenIncorrectId() {
-        UserNotFoundException e = Assertions.assertThrows(
-                UserNotFoundException.class,
-                () -> storage.getUserById(100)
-        );
-
-        assertEquals("Пользователь с id=100 не найден.", e.getMessage());
-    }
 }

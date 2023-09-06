@@ -95,17 +95,6 @@ public class FilmStorageTest {
         Film filmById = filmStorage.findFilmById(film.getId());
         assertEquals(film, filmById);
     }
-
-    @Test
-    void shouldNotGetFilmWhenIncorrectId() {
-        FilmNotFoundException e = Assertions.assertThrows(
-                FilmNotFoundException.class,
-                () -> filmStorage.findFilmById(100)
-        );
-
-        assertEquals("Фильм с id=100 не найден.", e.getMessage());
-    }
-
     @Test
     void shouldGetMostPopular(@Autowired LikeStorage likeStorage) {
         Film film1 = new Film("Оно", "Красный шарик", LocalDate.parse("2017-09-07"),

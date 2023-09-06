@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.GenreNotFoundException;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 
@@ -17,6 +19,10 @@ public class GenreService {
     }
 
     public Genre getGenreById(int id) {
-        return storage.getGenreById(id);
+        try {
+            return storage.getGenreById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new GenreNotFoundException("Жанр с id=" + id + " не найден.");
+        }
     }
 }

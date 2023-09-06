@@ -23,13 +23,9 @@ public class RatingMPADbStorage implements RatingMPAStorage {
     }
 
     @Override
-    public RatingMPA getRatingMPAById(int id) {
-        try {
-            String sqlQuery = "select * from rating where id = ?";
-            return jdbcTemplate.queryForObject(sqlQuery, this::mapFromRow, id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new RatingMPANotFoundException("Рейтинг MPA с id=" + id + " не найден.");
-        }
+    public RatingMPA getRatingMPAById(int id)  {
+        String sqlQuery = "select * from rating where id = ?";
+        return jdbcTemplate.queryForObject(sqlQuery, this::mapFromRow, id);
     }
 
     private RatingMPA mapFromRow(ResultSet rs, int rowNum) throws SQLException {

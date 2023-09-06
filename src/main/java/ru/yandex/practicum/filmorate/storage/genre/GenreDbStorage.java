@@ -29,16 +29,12 @@ public class GenreDbStorage implements GenreStorage {
 
     @Override
     public Genre getGenreById(int id) {
-        try {
-            String sqlQuery = "select * from GENRE where genre_id = ?";
-            return jdbcTemplate.queryForObject(
-                    sqlQuery,
-                    FilmorateMapper::genreFromRow,
-                    id
-            );
-        } catch (EmptyResultDataAccessException e) {
-            throw new GenreNotFoundException("Жанр с id=" + id + " не найден.");
-        }
+        String sqlQuery = "select * from GENRE where genre_id = ?";
+        return jdbcTemplate.queryForObject(
+                sqlQuery,
+                FilmorateMapper::genreFromRow,
+                id
+        );
     }
 
     @Override
