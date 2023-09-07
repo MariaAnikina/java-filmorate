@@ -21,15 +21,12 @@ public class UserController {
 
     @GetMapping
     public List<User> getUsers() {
-        return new ArrayList<>(userService.getUsers().values());
+        return userService.getUsers();
     }
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable Integer id) {
-        if (userService.getUsers().containsKey(id)) {
-            return userService.getUsers().get(id);
-        }
-        throw new NullPointerException();
+        return userService.getUserById(id);
     }
 
     @PostMapping
@@ -43,13 +40,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public Set<Integer> addAsFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
-        return userService.addAsFriend(id, friendId);
+    public void addAsFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
+        userService.addAsFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public Set<Integer> removeFromFriends(@PathVariable Integer id, @PathVariable  Integer friendId) {
-        return userService.removeFromFriends(id, friendId);
+    public void removeFromFriends(@PathVariable Integer id, @PathVariable  Integer friendId) {
+       userService.removeFromFriends(id, friendId);
     }
 
     @GetMapping("/{id}/friends")
@@ -58,7 +55,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public Set<User> displayListOfMutualFriends(@PathVariable Integer id, @PathVariable  Integer otherId) {
+    public List<User> displayListOfMutualFriends(@PathVariable Integer id, @PathVariable  Integer otherId) {
         return userService.displayListOfMutualFriends(id, otherId);
     }
 }

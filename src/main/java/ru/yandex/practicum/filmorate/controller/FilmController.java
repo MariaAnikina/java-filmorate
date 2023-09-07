@@ -21,15 +21,12 @@ public class FilmController {
 
     @GetMapping
     public List<Film> getFilms() {
-        return new ArrayList<>(filmService.getFilms().values());
+        return new ArrayList<>(filmService.getFilms());
     }
 
     @GetMapping("/{id}")
     public Film getFilm(@PathVariable Integer id) {
-        if (filmService.getFilms().containsKey(id)) {
-            return filmService.getFilms().get(id);
-        }
-        throw new NullPointerException();
+        return filmService.getFilmById(id);
     }
 
     @PostMapping
@@ -43,13 +40,13 @@ public class FilmController {
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public Set<Integer> addLike(@PathVariable Integer id, @PathVariable Integer userId) {
-        return filmService.addLike(id, userId);
+    public void addLike(@PathVariable Integer id, @PathVariable Integer userId) {
+        filmService.addLike(id, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public Film deleteLike(@PathVariable Integer id, @PathVariable Integer userId) {
-        return filmService.deleteLike(id, userId);
+    public void deleteLike(@PathVariable Integer id, @PathVariable Integer userId) {
+         filmService.deleteLike(id, userId);
     }
 
     @GetMapping("/popular")

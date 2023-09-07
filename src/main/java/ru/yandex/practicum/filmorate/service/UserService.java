@@ -1,77 +1,74 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.friend.FriendStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
+import static ru.yandex.practicum.filmorate.service.validators.UserValidator.validate;
 
 import java.util.*;
 
 @Service
 public class UserService {
     UserStorage userStorage;
+    FriendStorage friendStorage;
 
     @Autowired
-    public UserService(UserStorage userStorage) {
+    public UserService(@Qualifier("databaseUser") UserStorage userStorage, FriendStorage friendStorage) {
         this.userStorage = userStorage;
+        this.friendStorage = friendStorage;
     }
 
-    public Set<Integer> addAsFriend(Integer id, Integer friendId) {
-        User user1 = userStorage.getUsers().get(id);
-        User user2 = userStorage.getUsers().get(friendId);
-        if (user1.getFriends() == null) {
-            user1.setFriends(new HashSet<>());
+    public void addAsFriend(Integer id, Integer friendId) {
+        try {
+            getUserById(id);
+            getUserById(friendId);
+            friendStorage.addFriend(id, friendId);
+        } catch (UserNotFoundException e) {
+            throw new UserNotFoundException("Пользователь с id=" + id + " не найден.");
         }
-        if (user2.getFriends() == null) {
-            user2.setFriends(new HashSet<>());
-        }
-        user1.getFriends().add(friendId);
-        user2.getFriends().add(id);
-        return user1.getFriends();
     }
 
-    public Set<Integer> removeFromFriends(Integer id, Integer friendId) {
-        User user1 = userStorage.getUsers().get(id);
-        User user2 = userStorage.getUsers().get(friendId);
-        user1.getFriends().remove(user2.getId());
-        user2.getFriends().remove(user1.getId());
-        return user1.getFriends();
+    public void removeFromFriends(Integer id, Integer friendId) {
+        getUserById(id);
+        getUserById(friendId);
+        friendStorage.deleteFriend(id, friendId);
     }
 
-    public Set<User> displayListOfMutualFriends(Integer id, Integer friendId) {
-        User user1 = userStorage.getUsers().get(id);
-        User user2 = userStorage.getUsers().get(friendId);
-        Set<User> mutualFriends = new HashSet<>();
-        if (user1.getFriends() != null) {
-            for (Integer idUser : user1.getFriends()) {
-                if (user2.getFriends().contains(idUser)) {
-                    mutualFriends.add(userStorage.getUsers().get(idUser));
-                }
-            }
-        }
-        return mutualFriends;
+    public List<User> displayListOfMutualFriends(Integer id, Integer friendId) {
+        getUserById(id);
+        getUserById(friendId);
+        return friendStorage.getCommonFriends(id, friendId);
     }
 
     public List<User> getListOfFriends(Integer id) {
-        User user = userStorage.getUsers().get(id);
-        List<User> friends = new ArrayList<>();
-        if (user.getFriends() != null) {
-            for (Integer friend : user.getFriends()) {
-                friends.add(userStorage.getUsers().get(friend));
-            }
-        }
-        return friends;
+        getUserById(id);
+        return friendStorage.getFriends(id);
     }
 
-    public Map<Integer, User> getUsers() {
+    public User getUserById(Integer id) {
+        try {
+            return userStorage.getUserById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new UserNotFoundException("Пользователь с id=" + id + " не найден.");
+        }
+    }
+
+    public List<User> getUsers() {
         return userStorage.getUsers();
     }
 
     public User create(User user) {
+        validate(user);
         return userStorage.create(user);
     }
 
     public User update(User user) {
+        validate(user);
         return userStorage.update(user);
     }
 }

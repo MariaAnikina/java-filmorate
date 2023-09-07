@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -6,11 +6,13 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Component
+@Component("memoryUser")
 public class InMemoryUserStorage implements UserStorage {
     private Map<Integer, User> users = new HashMap<>();
     private int idUser = 1;
@@ -77,18 +79,13 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
-    @Override
-    public User delete(User user) {
-        if (users.containsKey(user.getId())) {
-            users.remove(user.getId());
-            log.debug("Логирование удаленного объекта: {}", user);
-            return user;
-        }
-        throw new ValidationException("Пользователя с id = " + user.getId() + " не существует");
+    public List<User> getUsers() {
+        return new ArrayList<>(users.values());
     }
 
-    public Map<Integer, User> getUsers() {
-        return users;
+    @Override
+    public User getUserById(int id) {
+        return null;
     }
 
     public void setUsers(Map<Integer, User> users) {
